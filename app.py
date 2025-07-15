@@ -80,7 +80,7 @@ def get_file_contents_from_uuid_in_directory(uuid, directory):
 @app.route('/', methods=['GET'])
 def get_api_root_object():
 
-    with open('data/mock-api-root-response.json', 'r') as api_response:
+    with open('data/root.json', 'r') as api_response:
         return jsonify(json.loads(api_response.read()))
 
 
@@ -96,11 +96,11 @@ def get_all_services():
 
 # GET /services/{id}
 @app.route('/services/<uuid:service_id>', methods=['GET'])
-def get_service(service_id):
+def get_service(identifier):
 
-    service = get_file_contents_from_uuid_in_directory(service_id, "data/services")
+    content = get_file_contents_from_uuid_in_directory(identifier, "data/services")
 
-    if service is not None:
+    if content is not None:
         return jsonify(service)
     else:
         return make_response("Item Not Found", 404)
@@ -122,10 +122,10 @@ def get_all_taxonomies():
     return jsonify(page)
 
 # GET /taxonomies/{id}
-@app.route('/taxonomies/<uuid:service_id>', methods=['GET'])
-def get_service(service_id):
+@app.route('/taxonomies/<uuid:identifier>', methods=['GET'])
+def get_taxonomy(identifier):
 
-    content = get_file_contents_from_uuid_in_directory(service_id, "data/taxonomies")
+    content = get_file_contents_from_uuid_in_directory(identifier, "data/taxonomies")
 
     if content is not None:
         return jsonify(content)
@@ -143,10 +143,10 @@ def get_all_taxonomy_terms():
     return jsonify(page)
 
 # GET /taxonomy_terms/{id}
-@app.route('/taxonomy_terms/<uuid:service_id>', methods=['GET'])
-def get_service(service_id):
+@app.route('/taxonomy_terms/<uuid:identifier>', methods=['GET'])
+def get_taxonomy_term(identifier):
 
-    content = get_file_contents_from_uuid_in_directory(service_id, "data/taxonomy_terms")
+    content = get_file_contents_from_uuid_in_directory(identifier, "data/taxonomy_terms")
 
     if content is not None:
         return jsonify(content)
@@ -164,10 +164,10 @@ def get_all_organizations():
     return jsonify(page)
 
 # GET /organizations/{id}
-@app.route('/organizations/<uuid:service_id>', methods=['GET'])
-def get_service(service_id):
+@app.route('/organizations/<uuid:identifier>', methods=['GET'])
+def get_organization(identifier):
 
-    content = get_file_contents_from_uuid_in_directory(service_id, "data/organizations")
+    content = get_file_contents_from_uuid_in_directory(identifier, "data/organizations")
 
     if content is not None:
         return jsonify(content)
@@ -185,10 +185,10 @@ def get_all_service_at_locations():
     return jsonify(page)
 
 # GET /service_at_locations/{id}
-@app.route('/service_at_locations/<uuid:service_id>', methods=['GET'])
-def get_service(service_id):
+@app.route('/service_at_locations/<uuid:identifier>', methods=['GET'])
+def get_service_at_location(identifier):
 
-    content = get_file_contents_from_uuid_in_directory(service_id, "data/service_at_locations")
+    content = get_file_contents_from_uuid_in_directory(identifier, "data/service_at_locations")
 
     if content is not None:
         return jsonify(content)
