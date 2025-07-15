@@ -11,6 +11,8 @@ Example: the `service` object with UUID `ac148810-d857-441c-9679-408f346de14b` s
 
 The Mock API will handle retrieving lists of objects for you and build the `Page` schema required by the HSDS API Specification, so all you need to do is provide the JSON files representing your objects to mock an API setup.
 
+The Mock API will run on port 5000, so to get a list of all services you'll need to visit `http://localhost:5000/services`.
+
 ## Running the application
 
 1. Set up the Python virtual environment:
@@ -27,6 +29,8 @@ pip install -r requirements.txt
 
 3. Run the application `./app.py`
 
+4. Start querying the API: `http://localhost:5000`
+
 ## Limitations
 
 ### No support for parameters
@@ -35,4 +39,4 @@ There is currently no support for parameters in the Mock API on any endpoint
 
 ### Large datasets may cause you to run out of memory
 
-This tool is designed to mock up a basic API with some data for you to test HSDS tools against an API. It doesn't attempt to paginate or stream any data, and naïvely puts responses in a single `page` object. This means if you dump 4000 services into the `data/services/` directory, the mock API will respond to `GET /services` by giving you a single page of 4000 services!
+This tool is designed to mock up a basic API with some data for you to test HSDS tools against an API. It doesn't attempt to paginate or stream any data, and naïvely puts responses in a single `Page` object. This means if you dump 4000 services into the `data/services/` directory, the mock API will respond to `GET /services` by giving you a single page of 4000 services!
