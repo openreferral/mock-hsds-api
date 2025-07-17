@@ -11,7 +11,7 @@ Example: the `service` object with UUID `ac148810-d857-441c-9679-408f346de14b` s
 
 The Mock API will handle retrieving lists of objects for you and build the `Page` schema required by the HSDS API Specification, so all you need to do is provide the JSON files representing your objects to mock an API setup.
 
-The Mock API will run on port 5000, so to get a list of all services you'll need to visit `http://localhost:5000/services`.
+The Mock API will run on port 5000, so to get a list of all services you'll need to visit `http://localhost:5000/services`. Some users report not being able to access `localhost:5000`, so depending on the configuration of your system you might need to use `http://127.0.0.1:5000/services` instead.
 
 ## Running the application
 
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 3. Run the application `./app.py`
 
-4. Start querying the API: `http://localhost:5000`
+4. Start querying the API: `http://localhost:5000` or `http://127.0.0.1:5000`
 
 ## Limitations
 
