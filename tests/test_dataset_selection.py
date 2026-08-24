@@ -1,3 +1,5 @@
+import importlib
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -31,7 +33,7 @@ class DatasetSelectionTests(unittest.TestCase):
             app.DATA_ROOT = data_root
             app.DATASET_NAME = "all-valid-data"
 
-            self.assertEqual(app.get_data_directory(), dataset)
+            self.assertEqual(app.get_data_directory(), dataset.resolve())
 
     def test_missing_named_dataset_fails_clearly(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -41,11 +43,27 @@ class DatasetSelectionTests(unittest.TestCase):
             with self.assertRaisesRegex(FileNotFoundError, "missing-dataset"):
                 app.get_data_directory()
 
+    def test_rejects_dataset_outside_data_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            app.DATA_ROOT = Path(directory) / "data"
+            app.DATA_ROOT.mkdir()
+            app.DATASET_NAME = "../../etc"
+
+            with self.assertRaisesRegex(ValueError, "outside data root"):
+                app.get_data_directory()
+
     def test_parse_args_accepts_dataset_option(self):
         with patch("sys.argv", ["app.py", "--dataset", "mixed-data"]):
             args = app.parse_args()
 
         self.assertEqual(args.dataset, "mixed-data")
+
+    def test_environment_variable_configures_dataset_on_import(self):
+        with patch.dict(os.environ, {"HSDS_DATASET": "all-valid-data"}):
+            importlib.reload(app)
+            self.assertEqual(app.DATASET_NAME, "all-valid-data")
+
+        importlib.reload(app)
 
 
 if __name__ == "__main__":
