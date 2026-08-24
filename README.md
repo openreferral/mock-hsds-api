@@ -61,9 +61,15 @@ Select a dataset when starting the app:
 ./app.py --dataset all-valid-data
 ```
 
-If `--dataset` is omitted, the existing top-level `data/` layout continues to be used, preserving backwards compatibility.
+For deployments that import the Flask application instead of running `app.py` directly, the same dataset can be selected with the `HSDS_DATASET` environment variable:
 
-If the requested dataset directory does not exist, the application exits with a clear error instead of silently serving another dataset.
+```bash
+HSDS_DATASET=all-valid-data flask --app app run
+```
+
+An explicit `--dataset` value takes precedence when `app.py` is run directly. If neither option is provided, the existing top-level `data/` layout continues to be used, preserving backwards compatibility.
+
+If the requested dataset directory does not exist, or resolves outside the configured `data/` root, the application exits with a clear error instead of silently serving another dataset.
 
 ## Limitations
 
