@@ -31,6 +31,46 @@ pip install -r requirements.txt
 
 4. Start querying the API: `http://localhost:5000` or `http://127.0.0.1:5000`
 
+## Using multiple datasets
+
+The mock API can serve a named dataset from a subdirectory inside `data/`. This allows you to keep different test fixtures side by side, for example valid, broken, or mixed datasets.
+
+A named dataset uses the same directory layout as the existing `data/` directory:
+
+```text
+data/
+  all-valid-data/
+    root.json
+    services/
+    organizations/
+    taxonomies/
+    taxonomy_terms/
+    service_at_locations/
+  all-broken-data/
+    root.json
+    services/
+    organizations/
+    taxonomies/
+    taxonomy_terms/
+    service_at_locations/
+```
+
+Select a dataset when starting the app:
+
+```bash
+./app.py --dataset all-valid-data
+```
+
+For deployments that import the Flask application instead of running `app.py` directly, the same dataset can be selected with the `HSDS_DATASET` environment variable:
+
+```bash
+HSDS_DATASET=all-valid-data flask --app app run
+```
+
+An explicit `--dataset` value takes precedence when `app.py` is run directly. If neither option is provided, the existing top-level `data/` layout continues to be used, preserving backwards compatibility.
+
+If the requested dataset directory does not exist, or resolves outside the configured `data/` root, the application exits with a clear error instead of silently serving another dataset.
+
 ## Limitations
 
 ### No support for parameters
