@@ -95,13 +95,13 @@ def get_all_services():
     return jsonify(page)
 
 # GET /services/{id}
-@app.route('/services/<uuid:service_id>', methods=['GET'])
+@app.route('/services/<uuid:identifier>', methods=['GET'])
 def get_service(identifier):
 
     content = get_file_contents_from_uuid_in_directory(identifier, "data/services")
 
     if content is not None:
-        return jsonify(service)
+        return jsonify(content)
     else:
         return make_response("Item Not Found", 404)
 
