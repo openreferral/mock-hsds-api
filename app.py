@@ -5,11 +5,12 @@
 from flask import Flask, jsonify, request, make_response
 import argparse
 import json
+import os
 from pathlib import Path
 
 app = Flask(__name__)
 DATA_ROOT = Path("data")
-DATASET_NAME = None
+DATASET_NAME = os.environ.get("HSDS_DATASET")
 
 
 # ===================================================
@@ -24,7 +25,16 @@ def get_data_directory():
     if DATASET_NAME is None:
         return DATA_ROOT
 
-    dataset_directory = DATA_ROOT / DATASET_NAME
+    data_root = DATA_ROOT.resolve()
+    dataset_directory = (DATA_ROOT / DATASET_NAME).resolve()
+
+    try:
+        dataset_directory.relative_to(data_root)
+    except ValueError as exc:
+        raise ValueError(
+            f"Dataset '{DATASET_NAME}' resolves outside data root"
+        ) from exc
+
     if not dataset_directory.is_dir():
         raise FileNotFoundError(
             f"Dataset '{DATASET_NAME}' was not found at {dataset_directory}"
@@ -112,13 +122,13 @@ def get_all_services():
     return jsonify(page)
 
 # GET /services/{id}
-@app.route('/services/<uuid:identifier>', methods=['GET'])
+@app.route('/services/<uuid:service_id>', methods=['GET'])
 def get_service(identifier):
 
     content = get_file_contents_from_uuid_in_directory(identifier, get_data_directory() / "services")
 
     if content is not None:
-        return jsonify(content)
+        return jsonify(service)
     else:
         return make_response("Item Not Found", 404)
 
@@ -231,6 +241,7 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    DATASET_NAME = args.dataset
+    if args.dataset:
+        DATASET_NAME = args.dataset
     get_data_directory()
     app.run(debug=True)
