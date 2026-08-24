@@ -31,6 +31,40 @@ pip install -r requirements.txt
 
 4. Start querying the API: `http://localhost:5000` or `http://127.0.0.1:5000`
 
+## Using multiple datasets
+
+The mock API can serve a named dataset from a subdirectory inside `data/`. This allows you to keep different test fixtures side by side, for example valid, broken, or mixed datasets.
+
+A named dataset uses the same directory layout as the existing `data/` directory:
+
+```text
+data/
+  all-valid-data/
+    root.json
+    services/
+    organizations/
+    taxonomies/
+    taxonomy_terms/
+    service_at_locations/
+  all-broken-data/
+    root.json
+    services/
+    organizations/
+    taxonomies/
+    taxonomy_terms/
+    service_at_locations/
+```
+
+Select a dataset when starting the app:
+
+```bash
+./app.py --dataset all-valid-data
+```
+
+If `--dataset` is omitted, the existing top-level `data/` layout continues to be used, preserving backwards compatibility.
+
+If the requested dataset directory does not exist, the application exits with a clear error instead of silently serving another dataset.
+
 ## Limitations
 
 ### No support for parameters
