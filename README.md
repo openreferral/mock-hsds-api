@@ -31,6 +31,15 @@ pip install -r requirements.txt
 
 4. Start querying the API: `http://localhost:5000` or `http://127.0.0.1:5000`
 
+## Deploying via Docker
+
+You might want to deploy this via Docker so as to join it to the same network as other Open Referral tools such as the [ORUK Validator](https://github.com/OpenReferralUK/oruk-validator/) for testing.
+
+```bash
+docker build -t mock-hsds-api:latest . # build the image
+docker run -p 5001:5000 --network my-open-referral-tool-network --name mock-hsds-api mock-hsds-api:latest # start the container, mapping the container's port 5000 to the host port 5001, join to an existing network with the name mock-hsds-api
+```
+
 ## Limitations
 
 ### No support for parameters
